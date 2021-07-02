@@ -1,0 +1,205 @@
+.main
+{
+    width: 100%;
+}
+.inputContainer
+{
+    display: flex;
+    padding: 0px 30px;
+
+}
+.inputContainerText
+{
+    flex: 1;
+    margin: 0px 5px;
+}
+.inputButton
+{
+    flex: 0;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(55, 125, 218);
+    box-shadow: rgb(43, 113, 204) 0px 0px 4px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    font-size: 16px;
+}
+.inputButton:disabled
+{
+    background-color: rgb(221, 219, 219);
+    box-shadow: rgba(43,113,204,0) 0px 0px 4px;
+    color: gray;
+}
+@keyframes rotation {
+    0%
+    {
+        transform: rotateZ(0deg);
+    }
+    80%
+    {
+        transform: rotateZ(340deg);
+    }
+    100%
+    {
+        transform: rotateZ(360deg);
+    }
+}
+@keyframes enbigger {
+    0%, 100%
+    {
+        transform: scale(1);
+    }
+    80%
+    {
+        transform: scale(1.15);
+    }
+    90%
+    {
+        transform: scale(.95);
+    }
+}
+@keyframes blurEffect {
+    0%, 10%, 80%, 100%
+    {
+        filter: blur(0);
+    }
+    50%
+    {
+        filter: blur(1px);
+    }    
+}
+.loading
+{
+    position: absolute;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+.loading h1
+{
+    color:rgb(55, 125, 218);
+    animation:  enbigger 0.6s ease-in 0.35s infinite,
+                blurEffect 0.6s ease-in 0.35s infinite;
+}
+.h1Container
+{
+    animation: rotation 0.6s ease-in 0.35s infinite;
+}
+.topBar
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0px 10px;
+}
+.topBar h1
+{
+    color: rgb(55,125,218);
+}
+.logOut
+{
+    background-color: transparent;
+    border: none;
+    color:rgb(55, 125, 218);
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+}
+.logOut:hover
+{
+    text-decoration: underline;
+}
+.menuContainer
+{
+    background-color: #377dda;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 800;
+    clip-path: circle(0 at center);
+    transition: all 0.4s ease-out;
+}
+.menuContainerOpen
+{
+    clip-path: circle(100% at center);
+}
+.menuCloseButton
+{
+    position: absolute;
+    top: 32px;
+    right: 22px;
+    background-color: rgb(233, 230, 230);
+    border: none;
+    border-radius: 3px;
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color 0.1s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.menuCloseButton:hover
+{
+    background-color: rgb(243, 240, 240);
+}
+.menuList
+{
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    list-style: none;
+    justify-content: space-evenly;
+    height: 100%;
+    align-items: center;
+}
+.menuItem
+{
+    font-size: 27px;
+    color: #337dda;
+    cursor: pointer;
+}
+.menuItem:hover
+{
+    text-decoration: underline;
+}
+.flexContainer
+{
+    display: flex;
+    flex-direction: column;
+    height: 95vh;
+    width: 100%;
+}
+.flexTop
+{
+    flex: 0;
+}
+.flexBottom
+{
+    flex: 1;
+    overflow-y: auto;
+    padding: 0px 10px;
+}
+.flexBottom::-webkit-scrollbar
+{
+    width: 10px;
+}
+.flexBottom::-webkit-scrollbar-track
+{
+    background-color: transparent;
+}
+.flexBottom::-webkit-scrollbar-thumb
+{
+    background-color: whitesmoke;
+    border-radius: 7.5px;
+}
+.welcomeContainer
+{
+    text-align: center;
+}

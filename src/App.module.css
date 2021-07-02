@@ -1,0 +1,17 @@
+.container
+{
+    max-width: 400px;
+    margin: 0 auto;
+    margin-top: 2.5vh;
+    height: 95vh;
+    position: relative;
+    display: flex;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+@media screen and (max-width: 400px) {
+    .container
+    {
+        max-width: 95vw;
+    }
+}

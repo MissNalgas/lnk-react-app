@@ -1,0 +1,71 @@
+.logIn
+{
+    width: 100%;
+}
+.topBar
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.topBar h1
+{
+    color: rgb(55, 125, 218);
+}
+.buttonContainer
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.buttonContainer button
+{
+    width: 100%;
+    background-color: rgb(55,125,218);
+    box-shadow: rgb(43, 113, 204) 0px 0px 4px;
+    border: none;
+    padding: 8px;
+    border-radius: 10px;
+    color: whitesmoke;
+    cursor: pointer;
+    font-size: 16px;
+}
+.buttonContainer button:hover
+{
+    background-color: rgb(64, 135, 228);
+}
+@keyframes appearFromBottom {
+    0%, 100%
+    {
+        top: -100%;
+    }
+    10%
+    {
+        top: 45px;
+    }
+    13%
+    {
+        top: 25px;
+    }
+    16%
+    {
+        top: 30px;
+    }
+    80%
+    {
+        top: 30px;
+    }
+}
+.errorContainer
+{
+    background-color: rgb(248, 215, 215);
+    border: 2px solid rgb(241, 161, 161);
+    padding: 10px;
+    border-radius: 15px;
+    border-top-right-radius: 5px;
+    position: absolute;
+    top: -100%;
+    right: 30px;
+    animation: appearFromBottom 4s ease-in forwards;
+}
