@@ -6,11 +6,11 @@ import styles from "./Main.module.css";
 import {TextInput} from "../Input";
 import Links from "./Links";
 
-const WS_URL = "wss://mssnapplications.com/ws";
+const WS_URL = "wss://mssnapps.com/ws";
 
 export default function Main(props) {
 
-    const [user, setUser] = useState("");
+    const [user, setUser] = useState({email: "", firstname: "", id: 0, key: "", lastname: "", username: ""});
     const [messages, setMessages] = useState([]);
     const [ws, setWs] = useState(null);
     const [wsIsOpen, setWsIsOpen] = useState(false);
@@ -36,7 +36,7 @@ export default function Main(props) {
 
     const sendMessage = () => {
         if (input === "") return;
-        const msg = JSON.stringify({code: "message", id: user, message: input});
+        const msg = JSON.stringify({code: "message", id: user.key, message: input});
         ws.send(msg);
         setInput("");
     }
@@ -58,7 +58,7 @@ export default function Main(props) {
     }, [history]);
 
     useEffect(() => {
-        if (user === "" || ws === null) return;
+        if (user.key === "" || ws === null) return;
 
         ws.addEventListener("message", (data) => {
             let msg = JSON.parse(data.data);
@@ -70,7 +70,7 @@ export default function Main(props) {
         });
         ws.addEventListener("open", () => {
             setWsIsOpen(true);
-            const msg = JSON.stringify({code: "init", id: user, message: ""});
+            const msg = JSON.stringify({code: "init", id: user.key, message: ""});
             ws.send(msg);
         });
 
@@ -130,7 +130,7 @@ export default function Main(props) {
 
                 <div className={isMenuOpen ? `${styles.menuContainer} ${styles.menuContainerOpen}` : styles.menuContainer}>
                     <button className={ styles.menuCloseButton }onClick={() => setIsMenuOpen(false)}>
-                        <svg aria-hidden="false" width="12" height="12" viewBox="0 0 12 12"><polygon fill="currentColor" fill-rule="evenodd" points="11 1.576 6.583 6 11 10.424 10.424 11 6 6.583 1.576 11 1 10.424 5.417 6 1 1.576 1.576 1 6 5.417 10.424 1"></polygon></svg>
+                        <svg aria-hidden="false" width="12" height="12" viewBox="0 0 12 12"><polygon fill="currentColor" fillRule="evenodd" points="11 1.576 6.583 6 11 10.424 10.424 11 6 6.583 1.576 11 1 10.424 5.417 6 1 1.576 1.576 1 6 5.417 10.424 1"></polygon></svg>
                     </button>
                     <ul className={styles.menuList}>
                         { window.electron &&    <li className={styles.menuItem}>
@@ -153,7 +153,7 @@ export default function Main(props) {
                         </button>
                         </div>
                         <div className={styles.welcomeContainer}>
-                            <span>Welcome {user}!</span>
+                            <span>Welcome {user.username}!</span>
                         </div>
 
                         <div className={styles.inputContainer}>

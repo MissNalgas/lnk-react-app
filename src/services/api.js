@@ -9,7 +9,8 @@ export async function getUser() {
     if (res.data.code !== 200) {
         throw new Error(res);
     }
-    return res.data.data.decodedClaims.email;
+    console.log(res);
+    return res.data.user;
 }
 
 export async function logOut() {

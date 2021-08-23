@@ -125,10 +125,12 @@
     z-index: 800;
     clip-path: circle(0 at center);
     transition: all 0.4s ease-out;
+    pointer-events: none;
 }
 .menuContainerOpen
 {
     clip-path: circle(100% at center);
+    pointer-events: all;
 }
 .menuCloseButton
 {
