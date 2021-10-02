@@ -6,7 +6,7 @@ import styles from "./Main.module.css";
 import {TextInput} from "../Input";
 import Links from "./Links";
 
-const WS_URL = "wss://mssnapps.com/ws";
+const WS_URL = (process.env.NODE_ENV === "development") ? "ws://localhost:8081" : "wss://lnk.mssnapps.com/ws";
 
 export default function Main(props) {
 
