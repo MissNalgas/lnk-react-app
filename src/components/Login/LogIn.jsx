@@ -30,7 +30,7 @@ export default function LogIn() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        logIn(form.username, form.password).then((res) => {
+        logIn(form.username, form.password).then(() => {
             history.push("/");
         }).catch(() => {
             showErrorNotification();

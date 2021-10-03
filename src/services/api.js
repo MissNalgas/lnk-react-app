@@ -9,7 +9,6 @@ export async function getUser() {
     if (res.data.code !== 200) {
         throw new Error(res);
     }
-    console.log(res);
     return res.data.user;
 }
 

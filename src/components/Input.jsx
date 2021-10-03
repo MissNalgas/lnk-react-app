@@ -1,17 +1,18 @@
 import styles from "./Input.module.css";
 
 import { useState } from "react";
+import PropTypes from 'prop-types';
 
-export function TextInput(props) {
+function TextInput(props) {
 
     const {label, id, value, onChange, type, onKeyPress} = props;
     const [ active, setActive ] = useState(false);
 
-    const onFocus = (e) => {
+    const onFocus = () => {
         setActive(true);
     }
 
-    const onBlur = (e) => {
+    const onBlur = () => {
         if (value !== "") return;
         setActive(false);
     }
@@ -22,16 +23,24 @@ export function TextInput(props) {
                 <input onKeyPress={onKeyPress} onChange={onChange} value={value} onFocus={onFocus} onBlur={onBlur} id={id} className={styles.input} type={type}/>
             </div>
 }
+TextInput.propTypes = {
+    label: PropTypes.string,
+    id: PropTypes.string,
+    value: PropTypes.string,
+    onChange: PropTypes.function,
+    type: PropTypes.string,
+    onKeyPress: PropTypes.function
+}
 
-export function PassInput(props) {
+function PassInput(props) {
     const {label, id, value, onChange} = props;
     const [ active, setActive ] = useState(false);
 
-    const onFocus = (e) => {
+    const onFocus = () => {
         setActive(true);
     }
 
-    const onBlur = (e) => {
+    const onBlur = () => {
         if (value !== "") return;
         setActive(false);
     }
@@ -42,7 +51,14 @@ export function PassInput(props) {
             </div>
 }
 
-export function SubmitInput(props) {
+PassInput.propTypes = {
+    label: PropTypes.string,
+    id: PropTypes.string,
+    value: PropTypes.string,
+    onChange: PropTypes.function
+}
+
+function SubmitInput(props) {
 
     const {value} = props;
 
@@ -50,3 +66,8 @@ export function SubmitInput(props) {
                 <button type="submit">{value}</button>
             </div>
 }
+SubmitInput.propTypes = {
+    value: PropTypes.string
+}
+
+export {TextInput, PassInput, SubmitInput};

@@ -1,4 +1,5 @@
 import styles from "./Links.module.css";
+import PropTypes from "prop-types";
 
 
 function TextMessage(props) {
@@ -8,6 +9,10 @@ function TextMessage(props) {
                 <span>{content}</span>
             </div>
 }
+TextMessage.propTypes = {
+    content: PropTypes.string
+};
+
 
 function UrlMessage(props) {
     const { content } = props;
@@ -24,6 +29,9 @@ function UrlMessage(props) {
                 <span>{content}</span>
             </div>
 }
+UrlMessage.propTypes = {
+    content: PropTypes.string
+};
 
 export default function Links(props) {
 
@@ -44,3 +52,9 @@ export default function Links(props) {
                 {linksComp}
             </div>
 }
+Links.propTypes = {
+    links: PropTypes.arrayOf({
+        type: PropTypes.string,
+        message: PropTypes.string
+    })
+};

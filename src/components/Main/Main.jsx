@@ -8,7 +8,7 @@ import Links from "./Links";
 
 const WS_URL = (process.env.NODE_ENV === "development") ? "ws://localhost:8081" : "wss://lnk.mssnapps.com/ws";
 
-export default function Main(props) {
+export default function Main() {
 
     const [user, setUser] = useState({email: "", firstname: "", id: 0, key: "", lastname: "", username: ""});
     const [messages, setMessages] = useState([]);
@@ -62,10 +62,14 @@ export default function Main(props) {
 
         ws.addEventListener("message", (data) => {
             let msg = JSON.parse(data.data);
+            console.log("msg", msg);
             if (msg.code === "message") {
-
-                let endMessage = JSON.parse(msg.endMessage);
-                setMessages((msgs) => ([ endMessage, ...msgs]));
+                //let endMessage = JSON.parse(msg.endMessage);
+                setMessages(msg.content);
+            }
+            if (msg.code === 'success') {
+                console.log("success");
+                setMessages(msg.content);
             }
         });
         ws.addEventListener("open", () => {
