@@ -27,9 +27,9 @@ TextInput.propTypes = {
     label: PropTypes.string,
     id: PropTypes.string,
     value: PropTypes.string,
-    onChange: PropTypes.function,
+    onChange: PropTypes.func,
     type: PropTypes.string,
-    onKeyPress: PropTypes.function
+    onKeyPress: PropTypes.func
 }
 
 function PassInput(props) {
@@ -55,7 +55,7 @@ PassInput.propTypes = {
     label: PropTypes.string,
     id: PropTypes.string,
     value: PropTypes.string,
-    onChange: PropTypes.function
+    onChange: PropTypes.func
 }
 
 function SubmitInput(props) {

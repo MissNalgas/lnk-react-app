@@ -6,6 +6,8 @@ import styles from "./Main.module.css";
 import {TextInput} from "../Input";
 import Links from "./Links";
 
+import ContextMenu from "./contextMenu/ContextMenu";
+
 const WS_URL = (process.env.NODE_ENV === "development") ? "ws://localhost:8081" : "wss://lnk.mssnapps.com/ws";
 
 export default function Main() {
@@ -19,6 +21,26 @@ export default function Main() {
 
     const [isNotification, setIsNotification] = useState(false);
     const [isOpenLnk, setIsOpenLnk] = useState(false);
+
+    //Context menu
+    let mainRef = null;
+
+    const [contextPos, setContextPos] = useState({x: 0, y: 0, visible: false, items: []});
+
+    const openContextMenu = (x, y, items) => {
+        const rect = mainRef?.getBoundingClientRect();
+
+        const xp = x - rect.x;
+        const yp = y - rect.y;
+        setContextPos({x: xp, y: yp, visible: true, items});
+
+    }
+
+    const closeContextMenu = () => {
+        setContextPos((s) => ({...s, visible: false}));
+    }
+
+    //End Context Menu
 
     useEffect(() => {
         if (window.electron) {
@@ -50,8 +72,7 @@ export default function Main() {
             if(window.electron) {
                 window.electron.sendId(res);
             }
-        }).catch((err) => {
-            console.error(err);
+        }).catch(() => {
             history.push("/login");
         });
 
@@ -62,13 +83,11 @@ export default function Main() {
 
         ws.addEventListener("message", (data) => {
             let msg = JSON.parse(data.data);
-            console.log("msg", msg);
             if (msg.code === "message") {
                 //let endMessage = JSON.parse(msg.endMessage);
                 setMessages(msg.content);
             }
             if (msg.code === 'success') {
-                console.log("success");
                 setMessages(msg.content);
             }
         });
@@ -129,7 +148,7 @@ export default function Main() {
         }
     }
 
-    return  <div className={styles.main}>
+    return  <div onClick={closeContextMenu} ref={(r) => mainRef = r} className={styles.main}>
                 {!wsIsOpen && <div className={styles.loading}><div className={styles.h1Container}><h1>Lnk</h1></div></div>}
 
                 <div className={isMenuOpen ? `${styles.menuContainer} ${styles.menuContainerOpen}` : styles.menuContainer}>
@@ -169,9 +188,12 @@ export default function Main() {
 
                     </div>
                     <div className={styles.flexBottom}>
-                        <Links links={messages}/>
+                        <Links openContextMenu={openContextMenu} links={messages}/>
                     </div>
                 </div>
+
+
+                <ContextMenu context={contextPos}/>
 
                 
                 

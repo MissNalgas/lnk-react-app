@@ -1,0 +1,28 @@
+.contextMenu
+{
+    position: absolute;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 16px;
+    z-index: 100;
+    min-width: 30px;
+    min-height: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 5px;
+}
+.contextMenuHidden
+{
+    opacity: 0;
+}
+.item
+{
+    padding: 6px;
+    cursor: pointer;
+    color: rgb(34, 33, 33);
+    border-radius: 4px;
+}
+.item:hover
+{
+    background-color: #88a2bc;
+    color: white;
+}
