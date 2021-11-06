@@ -6,6 +6,8 @@ import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
 export default function App() {
 
+    if (process.env.NODE_ENV === 'development') console.log("Running on development!");
+
     return  <Router basename="/">
                 <div className={styles.container}>
                     <Switch>
