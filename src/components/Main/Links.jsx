@@ -1,6 +1,39 @@
 import styles from "./Links.module.css";
 import PropTypes from "prop-types";
 
+function ImgMessage(props) {
+    const { content, openContextMenu } = props;
+
+    const copyImgUrl = () => {
+        navigator.clipboard.writeText(content);
+    }
+
+    const openInNewTab = () => {
+        window.open(content);
+    }
+
+    const contextItems = [
+        {label: 'Copy image URL', fn: copyImgUrl},
+        {label: 'Open in new tab', fn: openInNewTab}
+    ]
+
+    const onContextMenu = (e) => {
+        e.preventDefault();
+        const x = e.clientX || 0;
+        const y = e.clientY || 0;
+        
+        openContextMenu(x, y, contextItems);
+    }
+
+    return  <div onContextMenu={onContextMenu} className={`${styles.message} ${styles.textMessage}`}>
+                <img className={styles.image} src={content} alt='image sent by lnk'/>
+            </div>
+}
+ImgMessage.propTypes = {
+    content: PropTypes.string,
+    openContextMenu: PropTypes.func
+}
+
 
 
 function TextMessage(props) {
@@ -77,7 +110,15 @@ function Links(props) {
 
 
     const validMessage = (msg) => {
-        return (msg.type === "url") ? <UrlMessage openContextMenu={openContextMenu} content={msg.message}/> : <TextMessage openContextMenu={openContextMenu} content={msg.message}/>;
+        switch(msg.type) {
+            case 'url':
+                return <UrlMessage openContextMenu={openContextMenu} content={msg.message}/>
+            case 'img':
+                return <ImgMessage openContextMenu={openContextMenu} content={msg.message}/>
+            default:
+                return <TextMessage openContextMenu={openContextMenu} content={msg.message}/>
+
+        }
     }
 
     const linksComp = links.map((msg, index) => {
