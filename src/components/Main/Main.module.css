@@ -33,6 +33,47 @@
     box-shadow: rgba(43,113,204,0) 0px 0px 4px;
     color: gray;
 }
+.uploadImageContainer
+{
+    flex: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.uploadImage
+{
+    cursor: pointer;
+    padding: 2px;
+    transition: all 0.2s ease-out;
+}
+.uploadImage:hover
+{
+    background-color: #f5f3f3;
+    border-radius: 6px;
+}
+.uploadImageSvg
+{
+    transition: all 0.2s ease-out;
+}
+@keyframes rotate {
+    from
+    {
+        transform: rotate(0deg)
+    }
+    to
+    {
+        transform: rotate(360deg);
+    }
+}
+.loadingSvg
+{
+    stroke: gray;
+    animation: rotate 1s linear infinite;
+}
+.uploadImage:hover .uploadImageSvg
+{
+    stroke: rgb(171, 188, 206);
+}
 @keyframes rotation {
     0%
     {

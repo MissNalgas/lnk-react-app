@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import {getUser, logOut} from "../../services/api";
 import { useHistory } from "react-router-dom";
+import axios from 'axios';
 
 import styles from "./Main.module.css";
 import {TextInput} from "../Input";
@@ -21,6 +22,8 @@ export default function Main() {
 
     const [isNotification, setIsNotification] = useState(false);
     const [isOpenLnk, setIsOpenLnk] = useState(false);
+
+    const [uploadingImage, setUploadingImage] = useState(false);
 
     //Context menu
     let mainRef = null;
@@ -56,11 +59,16 @@ export default function Main() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
  
 
-    const sendMessage = () => {
-        if (input === "") return;
-        const msg = JSON.stringify({code: "message", id: user.key, message: input});
+    const sendMessage = (eMsg) => {
+        let msg = '';
+        if (eMsg) {
+            msg = JSON.stringify({code: "message", id: user.key, message: eMsg});
+        } else {
+            if (input === '') return;            
+            msg = JSON.stringify({code: "message", id: user.key, message: input});
+            setInput("");
+        }
         ws.send(msg);
-        setInput("");
     }
 
     useEffect(() => {
@@ -148,6 +156,59 @@ export default function Main() {
         }
     }
 
+    const uploadImage = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploadingImage(true);
+
+        const generateToken = (length) => {
+            const chars = ['a', 'b', '2', 'd', '3', 'f'];
+            let res = [];
+            for (let i = 0; i < length; i++) {
+                const index = Math.floor(Math.random() * chars.length);
+                const char = chars[index];
+                res.push(char);
+            }
+            return res.join('');
+        }
+
+        const fileReader = new FileReader();
+        fileReader.onload = function(e) {
+            const result = e.target.result.split(',')[1] || '';
+
+            const token = generateToken(24);
+
+            axios.post('/api/signimage', {token}).then((res) => {
+                const {signature, expire} = res.data;
+
+                const form = new FormData();
+                form.append('file', result);
+                form.append('fileName', 'thisisanimage');
+                form.append('publicKey', 'public_StqLacAIgiwRS/m4q50jge6vwIo=');
+                form.append('signature', signature);
+                form.append('expire', expire);
+                form.append('token', token);
+
+                const endPoint = 'https://upload.imagekit.io/api/v1/files/upload';
+
+                axios.post(endPoint, form).then((res) => {
+                    const finalUrl = `https://ik.imagekit.io/ft0gvf67ajj/${res.data.name}`;
+                    sendMessage(finalUrl);
+                    setUploadingImage(false);
+                }).catch((err) => {
+                    console.error(err);
+                    setUploadingImage(false);
+                })
+                
+            }).catch((err) => {
+                console.error(err);
+                setUploadingImage(false);
+            });
+        }
+        fileReader.readAsDataURL(file);
+    }
+
     return  <div onClick={closeContextMenu} ref={(r) => mainRef = r} className={styles.main}>
                 {!wsIsOpen && <div className={styles.loading}><div className={styles.h1Container}><h1>Lnk</h1></div></div>}
 
@@ -184,6 +245,16 @@ export default function Main() {
                                 <TextInput onKeyPress={handleKeyPressed} onChange={inputHandleChange} value={input} type="text"/>
                             </div>
                             <button disabled={input === ""} className={styles.inputButton} onClick={() => sendMessage()}>Send</button>
+                            <div className={styles.uploadImageContainer}>
+                                <label className={styles.uploadImage} htmlFor='image-upload'>
+                                    {uploadingImage ?
+                                        <svg className={styles.loadingSvg} xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12c0 6-4.39 10-9.806 10C7.792 22 4.24 19.665 3 16"/><path d="M2 12C2 6 6.39 2 11.806 2 16.209 2 19.76 4.335 21 8"/><path d="M7 17l-4-1-1 4"/><path d="M17 7l4 1 1-4"/></svg>
+                                    :
+                                        <svg className={styles.uploadImageSvg} xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#dddbdb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 6a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6z"/><circle cx="8.5" cy="8.5" r="2.5"/><path d="M14.526 12.621L6 22h12.133A3.867 3.867 0 0 0 22 18.133V18c0-.466-.175-.645-.49-.99l-4.03-4.395a2 2 0 0 0-2.954.006z"/></svg>
+                                    }
+                                </label>
+                                <input onChange={uploadImage} style={{display: 'none'}} type='file' id='image-upload' name='image' accept='image/*'/> 
+                            </div>
                         </div>
 
                     </div>
