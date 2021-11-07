@@ -185,7 +185,7 @@ export default function Main() {
                 const form = new FormData();
                 form.append('file', result);
                 form.append('fileName', 'thisisanimage');
-                form.append('publicKey', 'public_StqLacAIgiwRS/m4q50jge6vwIo=');
+                form.append('publicKey', 'public_thiWtzsiQZ8cgvw6NIzrOYadi1A=');
                 form.append('signature', signature);
                 form.append('expire', expire);
                 form.append('token', token);
