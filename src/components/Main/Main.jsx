@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import {getUser, logOut} from "../../services/api";
+import useId from '../../hooks/useId';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
 
@@ -13,6 +14,7 @@ const WS_URL = (process.env.NODE_ENV === "development") ? "ws://localhost:8081" 
 
 export default function Main() {
 
+	const clientId = useId();
     const [user, setUser] = useState({email: "", firstname: "", id: 0, key: "", lastname: "", username: ""});
     const [messages, setMessages] = useState([]);
     const [ws, setWs] = useState(null);
@@ -62,10 +64,10 @@ export default function Main() {
     const sendMessage = (eMsg) => {
         let msg = '';
         if (eMsg) {
-            msg = JSON.stringify({code: "message", id: user.key, message: eMsg});
+            msg = JSON.stringify({code: "message", id: user.key, message: eMsg, sender: clientId});
         } else {
             if (input === '') return;            
-            msg = JSON.stringify({code: "message", id: user.key, message: input});
+            msg = JSON.stringify({code: "message", id: user.key, message: input, sender: clientId});
             setInput("");
         }
         ws.send(msg);
@@ -101,7 +103,7 @@ export default function Main() {
         });
         ws.addEventListener("open", () => {
             setWsIsOpen(true);
-            const msg = JSON.stringify({code: "init", id: user.key, message: ""});
+            const msg = JSON.stringify({code: "init", id: user.key, message: "", sender: clientId});
             ws.send(msg);
         });
 
@@ -155,6 +157,20 @@ export default function Main() {
             })
         }
     }
+
+	const clearMessages = () => {
+		if (!user.key) return;
+
+		const confirmation = confirm('Are you sure you want to delete the messages?');
+		if (!confirmation) return;
+		ws?.send(JSON.stringify({
+			code: 'clear',
+			message: 'clear',
+			id: user.key,
+			sender: clientId
+		}));
+		setIsMenuOpen(false);
+	}
 
     const uploadImage = (e) => {
         const file = e.target.files[0];
@@ -226,6 +242,7 @@ export default function Main() {
                                                     <input id="openLnk" onChange={handleOpenLnk} checked={isOpenLnk} type="checkbox"/>
                                                 </li>}
                         <li onClick={() => handleLogOut()} className={styles.menuItem}>Log out</li>
+						<li onClick={() => clearMessages()} className={styles.menuItem}>Clear messages</li>
                     </ul>
                 </div>
                 <div className={styles.flexContainer}>

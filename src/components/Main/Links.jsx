@@ -121,8 +121,8 @@ function Links(props) {
         }
     }
 
-    const linksComp = links.map((msg, index) => {
-        return  <div key={links.length - index}>
+    const linksComp = links.map((msg) => {
+        return  <div key={msg.uid}>
                     {validMessage(msg)}
                 </div>
     });
@@ -134,7 +134,8 @@ function Links(props) {
 Links.propTypes = {
     links: PropTypes.arrayOf(PropTypes.exact({
         type: PropTypes.string,
-        message: PropTypes.string
+		message: PropTypes.string,
+		uid: PropTypes.string
     })),
     openContextMenu: PropTypes.func
 };
