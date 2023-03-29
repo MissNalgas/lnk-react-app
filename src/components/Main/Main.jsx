@@ -172,57 +172,22 @@ export default function Main() {
 		setIsMenuOpen(false);
 	}
 
-    const uploadImage = (e) => {
+    const uploadFile = (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
         setUploadingImage(true);
 
-        const generateToken = (length) => {
-            const chars = ['a', 'b', '2', 'd', '3', 'f'];
-            let res = [];
-            for (let i = 0; i < length; i++) {
-                const index = Math.floor(Math.random() * chars.length);
-                const char = chars[index];
-                res.push(char);
-            }
-            return res.join('');
-        }
+		const form = new FormData();
+		form.append('file', file);
 
-        const fileReader = new FileReader();
-        fileReader.onload = function(e) {
-            const result = e.target.result.split(',')[1] || '';
-
-            const token = generateToken(24);
-
-            axios.post('/api/signimage', {token}).then((res) => {
-                const {signature, expire} = res.data;
-
-                const form = new FormData();
-                form.append('file', result);
-                form.append('fileName', 'thisisanimage');
-                form.append('publicKey', 'public_thiWtzsiQZ8cgvw6NIzrOYadi1A=');
-                form.append('signature', signature);
-                form.append('expire', expire);
-                form.append('token', token);
-
-                const endPoint = 'https://upload.imagekit.io/api/v1/files/upload';
-
-                axios.post(endPoint, form).then((res) => {
-                    const finalUrl = `https://ik.imagekit.io/ft0gvf67ajj/${res.data.name}`;
-                    sendMessage(finalUrl);
-                    setUploadingImage(false);
-                }).catch((err) => {
-                    console.error(err);
-                    setUploadingImage(false);
-                })
-                
-            }).catch((err) => {
-                console.error(err);
-                setUploadingImage(false);
-            });
-        }
-        fileReader.readAsDataURL(file);
+		axios.post('/api/upload-file', form).then(({data}) => {
+			const {url} = data;
+			sendMessage(url);
+		}).finally(() => {
+			setUploadingImage(false);
+			e.target.value = null;
+		});
     }
 
     return  <div onClick={closeContextMenu} ref={(r) => mainRef = r} className={styles.main}>
@@ -270,7 +235,7 @@ export default function Main() {
                                         <svg className={styles.uploadImageSvg} xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#dddbdb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 6a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6z"/><circle cx="8.5" cy="8.5" r="2.5"/><path d="M14.526 12.621L6 22h12.133A3.867 3.867 0 0 0 22 18.133V18c0-.466-.175-.645-.49-.99l-4.03-4.395a2 2 0 0 0-2.954.006z"/></svg>
                                     }
                                 </label>
-                                <input onChange={uploadImage} style={{display: 'none'}} type='file' id='image-upload' name='image' accept='image/*'/> 
+                                <input disabled={uploadingImage} onChange={uploadFile} style={{display: 'none'}} type='file' id='image-upload' name='image' accept='*/*'/> 
                             </div>
                         </div>
 

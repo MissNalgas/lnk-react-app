@@ -135,7 +135,8 @@ Links.propTypes = {
     links: PropTypes.arrayOf(PropTypes.exact({
         type: PropTypes.string,
 		message: PropTypes.string,
-		uid: PropTypes.string
+		uid: PropTypes.string,
+		sender: PropTypes.string
     })),
     openContextMenu: PropTypes.func
 };
