@@ -1,3 +1,4 @@
+import { proxy } from "../../utils/image";
 import styles from "./Links.module.css";
 import PropTypes from "prop-types";
 
@@ -26,7 +27,7 @@ function ImgMessage(props) {
     }
 
     return  <div onContextMenu={onContextMenu} className={`${styles.message} ${styles.textMessage}`}>
-                <img className={styles.image} src={content} alt='image sent by lnk'/>
+                <img className={styles.image} src={proxy(content)} alt='image sent by lnk'/>
             </div>
 }
 ImgMessage.propTypes = {
