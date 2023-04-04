@@ -1,15 +1,14 @@
 import { TextInput, PassInput } from "../Input";
-import {logIn} from "../../services/api";
 
 import styles from "./Login.module.css";
 
-import {useState} from "react";
-import { useHistory } from "react-router-dom";
+import {useEffect, useState} from "react";
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getUser } from "../../services/api";
 
 export default function LogIn() {
 
     const [form, setForm] = useState({username: "", password: ""});
-    const history = useHistory();
     const [noti, setNoti] = useState(false);
 
     const handlePasswordChange = (e) => {
@@ -29,15 +28,22 @@ export default function LogIn() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+		const {username, password} = form;
 
-        logIn(form.username, form.password).then(() => {
-            history.push("/");
-        }).catch(() => {
-            showErrorNotification();
-        })
+		const auth = getAuth();
+		signInWithEmailAndPassword(auth, username, password).catch(err => {
+			console.error(err);
+			showErrorNotification();
+		});
 
         setForm({username: "", password: ""});
     }
+
+	useEffect(() => {
+		getUser().then(() => {
+			window.location.href = '/';
+		}).catch(() => undefined);
+	})
 
     return  <div className={styles.logIn}>
                 <div className={styles.topBar}>
