@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import {getUser, logOut} from "../../services/api";
+import {getUser, uploadFile as uploadFileApi} from "../../services/api";
 import useId from '../../hooks/useId';
 import { useHistory } from "react-router-dom";
-import axios from 'axios';
 
 import styles from "./Main.module.css";
 import {TextInput} from "../Input";
 import Links from "./Links";
 
 import ContextMenu from "./contextMenu/ContextMenu";
+import { getAuth, signOut } from "firebase/auth";
 
 const WS_URL = (process.env.NODE_ENV === "development") ? "ws://localhost:8081" : "wss://lnk.mssnapps.com/ws";
 
@@ -82,7 +82,8 @@ export default function Main() {
             if(window.electron) {
                 window.electron.sendId(res);
             }
-        }).catch(() => {
+        }).catch((err) => {
+			console.error(err);
             history.push("/login");
         });
 
@@ -130,11 +131,10 @@ export default function Main() {
     }
 
     const handleLogOut = () => {
-        logOut().then(() => {
-            history.push("/login");
-        }).catch(() => {
-            alert("There was some problem logging out! :(");
-        });
+		const auth = getAuth();
+		signOut(auth).then(() => {
+			window.location.href = '/login';
+		}).catch(console.error);
     }
 
     const handleNotificationChange = (e) => {
@@ -178,11 +178,7 @@ export default function Main() {
 
         setUploadingImage(true);
 
-		const form = new FormData();
-		form.append('file', file);
-
-		axios.post('/api/upload-file', form).then(({data}) => {
-			const {url} = data;
+		uploadFileApi(file).then(({url}) => {
 			sendMessage(url);
 		}).finally(() => {
 			setUploadingImage(false);

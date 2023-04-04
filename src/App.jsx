@@ -2,9 +2,9 @@ import styles from "./App.module.css";
 import LogIn from "./components/Login/LogIn";
 import Main from "./components/Main/Main";
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import { AuthProvider } from "./hooks/useAuth";
 
-
-export default function App() {
+function App() {
 
     if (process.env.NODE_ENV === 'development') console.log("Running on development!");
 
@@ -20,4 +20,12 @@ export default function App() {
                     </Switch>
                 </div>
             </Router>
+}
+
+export default function AppWrapper() {
+	return (
+		<AuthProvider>
+			<App/>
+		</AuthProvider>
+	);
 }
