@@ -34,6 +34,12 @@ export async function getUser() {
     return res.data.user;
 }
 
+export async function postUser(payload) {
+	const a = await getAxios();
+	const res = await a.post('/api/user', payload);
+	return res.data;
+}
+
 export async function uploadFile(file) {
 	const a = await getAxios();
 	const form = new FormData();

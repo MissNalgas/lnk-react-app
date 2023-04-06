@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import {getUser, uploadFile as uploadFileApi} from "../../services/api";
 import useId from '../../hooks/useId';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./Main.module.css";
 import {TextInput} from "../Input";
@@ -20,12 +20,12 @@ export default function Main() {
     const [ws, setWs] = useState(null);
     const [wsIsOpen, setWsIsOpen] = useState(false);
     const [input, setInput] = useState("");
-    const history = useHistory();
 
     const [isNotification, setIsNotification] = useState(false);
     const [isOpenLnk, setIsOpenLnk] = useState(false);
 
     const [uploadingImage, setUploadingImage] = useState(false);
+	const navigate = useNavigate();
 
     //Context menu
     let mainRef = null;
@@ -75,19 +75,23 @@ export default function Main() {
 
     useEffect(() => {
 
-        getUser().then((res) => {
-            setUser(res);
-            setWs(new WebSocket(WS_URL));
+        getUser().then((user) => {
+			if (user === null) {
+				navigate('/register');
+			} else {
+				setUser(user);
+				setWs(new WebSocket(WS_URL));
 
-            if(window.electron) {
-                window.electron.sendId(res);
-            }
+				if(window.electron) {
+					window.electron.sendId(user);
+				}
+			}
         }).catch((err) => {
 			console.error(err);
-            history.push("/login");
+			navigate('/login');
         });
 
-    }, [history]);
+    }, [navigate]);
 
     useEffect(() => {
         if (user.key === "" || ws === null) return;

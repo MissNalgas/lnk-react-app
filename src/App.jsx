@@ -1,25 +1,34 @@
 import styles from "./App.module.css";
 import LogIn from "./components/Login/LogIn";
 import Main from "./components/Main/Main";
-import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import Register from "./components/register";
+import { createBrowserRouter, RouterProvider} from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
+
+const router = createBrowserRouter([
+	{
+		path: '/',
+		element: <Main/>
+	},
+	{
+		path: '/login',
+		element: <LogIn/>
+	},
+	{
+		path: '/register',
+		element: <Register/>
+	}
+]);
 
 function App() {
 
     if (process.env.NODE_ENV === 'development') console.log("Running on development!");
-
-    return  <Router basename="/">
-                <div className={styles.container}>
-                    <Switch>
-                        <Route path="/login">
-                            <LogIn/>
-                        </Route>
-                        <Route path="/">
-                            <Main/>
-                        </Route>
-                    </Switch>
-                </div>
-            </Router>
+	
+	return (
+		<div className={styles.container}>
+			<RouterProvider router={router}/>
+		</div>
+	);
 }
 
 export default function AppWrapper() {

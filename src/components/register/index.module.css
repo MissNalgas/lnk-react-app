@@ -1,0 +1,15 @@
+.container
+{
+	width: 100%;
+	color: gray;
+}
+.container h1
+{
+	color: #377dda;
+	text-align: center;
+}
+.container form
+{
+	display: flex;
+	flex-direction: column;
+}

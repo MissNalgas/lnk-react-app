@@ -31,7 +31,9 @@ export default function LogIn() {
 		const {username, password} = form;
 
 		const auth = getAuth();
-		signInWithEmailAndPassword(auth, username, password).catch(err => {
+		signInWithEmailAndPassword(auth, username, password).then(() => {
+			window.location.href = '/';
+		}).catch(err => {
 			console.error(err);
 			showErrorNotification();
 		});
